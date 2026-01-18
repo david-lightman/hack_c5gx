@@ -1,0 +1,17 @@
+# Loading work.tb_soc2(fast)
+# run -all
+# -------------------------------------------------------------
+# STARTING COMPREHENSIVE CPU TEST
+# -------------------------------------------------------------
+# Simulation halted at PC:    46 (Cycles:          87)
+# -------------------------------------------------------------
+# [PASS] Test 1: Constant Load (RAM[0]=12345)
+# [PASS] Test 2: ALU Add (10+20=30)
+# [PASS] Test 3: ALU Sub (5-5=0)
+# [PASS] Test 4: JEQ Conditional Jump
+# [PASS] Test 5: Loop Logic (Sum 1..5 = 15)
+# -------------------------------------------------------------
+# ** Note: $stop    : ../tb_soc2.v(89)
+#    Time: 9050 ns  Iteration: 0  Instance: /tb_soc2
+# Break at ../tb_soc2.v line 89
+# Stopped at ../tb_soc2.v line 89
