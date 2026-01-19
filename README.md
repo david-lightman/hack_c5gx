@@ -31,8 +31,7 @@ This project ports the theoretical Hack CPU, RAM, and ROM into physical hardware
 ### 2. Build and Run
 This project uses a standard Makefile workflow wrapping the Quartus CLI.
 
-1. Convert your Hack assembly to Memory Initialization File (.mif):
-   python hack2mif.py Pong.hack rom.mif
+1. Assemble your HaCK! code and copy/link the resulting machine code into [rom.hack](./tools/test_io.hack)
 
 2. Compile the Bitstream (Synthesis & Routing):
    make
@@ -43,7 +42,7 @@ This project uses a standard Makefile workflow wrapping the Quartus CLI.
 ### 3. Simulation
 To verify logic before hardware deployment:
 
-# Runs the comprehensive testbench in ModelSim/Questa
+# Runs the testbench in ModelSim/Questa
 make sim
 
 ## References
