@@ -51,3 +51,5 @@ make sim
 *   **Nand2Tetris**: The original course by Noam Nisan and Shimon Schocken.
 *   **Terasic**: Manufacturer of the Cyclone V GX Starter Kit.
 *   **Altera/Intel**: FPGA architecture documentation.
+*   **Michael Schröder**: Thanks to Micha for the email support - see [nand2tetris-fpga](https://gitlab.com/x653/nand2tetris-fpga/
+)
