@@ -200,6 +200,12 @@ module baseline_c5gx(
         .i_clk(clk_sys),
         .i_clk_mem(clk_mem),
         .i_reset(sys_reset),
+
+        // GPIO
+        .i_sw(SW[9:2]),
+        .i_keys(~KEY[3:0]),
+        .o_ledg(LEDG[7:0]),
+
         .o_pc_out(pc_debug),
         .o_instruction(instruction_debug),
         .o_addressM(addr_debug)

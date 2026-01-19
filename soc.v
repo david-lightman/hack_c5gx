@@ -1,3 +1,7 @@
+`define mem_RAM         15'h4000
+`define mem_SW          15'h6001
+`define mem_KEYS        15'h6002
+`define mem_LEDG        15'h6003
 /* 
     soc.v
 
@@ -22,6 +26,11 @@ module soc (
     input wire          i_clk_mem,
     input wire          i_reset,
 
+    // GPIO
+    input [7:0]        i_sw,        // switches {9:2}
+    input [3:0]        i_keys,      // keys {3:0}
+    output reg [7:0]   o_ledg,      // green-leds {7:0}
+
     output [17:0]       o_pc_out,
     output [15:0]       o_instruction,
     output [14:0]       o_addressM 
@@ -41,10 +50,16 @@ module soc (
     //--------------------------------------------------------------
     // CPU
     //--------------------------------------------------------------
+    // multiplexor for memory-mapped I/O
+    wire [15:0] cpu_inM_mux = (cpu_addressM  < `mem_RAM) ? ram_out :
+                   (cpu_addressM == `mem_SW)  ? {8'b0, i_sw} :
+                   (cpu_addressM == `mem_KEYS)? {12'b0, i_keys} :
+                                                16'b0;
+
     HackCPU cpu (
         .clk(i_clk),
         .reset(i_reset),
-        .inM(ram_out),
+        .inM(cpu_inM_mux),
         .instruction(instruction),
         .outM(cpu_outM),
         .writeM(cpu_writeM),
@@ -60,7 +75,6 @@ module soc (
     //    Clocked by clk_mem to provide data "instantly" relative 
     //    to the next CPU rising edge.
     //--------------------------------------------------------------
-    // REPLACE "Pong.mif" with your actual program file
     HackROM #(.INIT_FILE("rom.hack")) rom (
         .address(cpu_pc),
         .clk(i_clk_mem), 
@@ -71,12 +85,33 @@ module soc (
     // Data Memory (RAM)
     //    Also clocked by clk_mem.
     //--------------------------------------------------------------
+    wire wen = (cpu_addressM < `mem_RAM) && cpu_writeM;
     HackRAM ram (
         .clk(i_clk_mem),
         .address(cpu_addressM),
         .data_in(cpu_outM),
-        .write_enable(cpu_writeM),
+        .write_enable(wen),
         .data_out(ram_out)
     );
+
+    // GPIO Outputs
+    // control synchronous io (e.g. LED)
+    always @(posedge i_clk_mem or posedge i_reset ) begin
+        // reset
+        if (i_reset) begin
+            o_ledg <= 8'b0;
+        end 
+        
+        else begin
+            case (cpu_addressM)
+                `mem_LEDG: begin
+                    if (cpu_writeM) begin
+                        o_ledg <= cpu_outM[7:0];
+                    end
+                end
+                default: ;
+            endcase
+        end
+    end
 
 endmodule 
